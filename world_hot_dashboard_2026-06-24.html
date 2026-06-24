@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>今日全球热点简报</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --panel: #ffffff;
+      --ink: #22251f;
+      --muted: #667067;
+      --line: #dfe4dc;
+      --red: #d94135;
+      --blue: #2d6cdf;
+      --green: #287d5b;
+      --amber: #b46a1a;
+      --violet: #6a56c9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 20px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 15px;
+    }
+    .status {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 8px;
+      align-items: center;
+    }
+    .metric {
+      min-width: 96px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+    .metric b {
+      display: block;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 14px;
+    }
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .event-card, .trend-card, .watch-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .investment-hero {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid #cfd8d0;
+      border-radius: 8px;
+      background: #eef4ee;
+    }
+    .investment-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+    .investment-head h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .investment-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .investment-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .investment-card {
+      min-height: 154px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .investment-card span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .investment-card strong {
+      float: right;
+      color: var(--red);
+      font-size: 12px;
+    }
+    .investment-card h3 {
+      clear: both;
+      margin: 9px 0 8px;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+    .investment-card p {
+      margin: 0;
+      color: #424a42;
+      font-size: 13px;
+    }
+    .event-card {
+      padding: 16px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .event-card:nth-child(1), .event-card:nth-child(2) {
+      border-top: 4px solid var(--red);
+    }
+    .event-card:nth-child(3), .event-card:nth-child(4), .event-card:nth-child(5) {
+      border-top: 4px solid var(--blue);
+    }
+    .event-card:nth-child(n+6) {
+      border-top: 4px solid var(--green);
+    }
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .rank {
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 15px;
+      margin-right: 2px;
+    }
+    .tag, .region, .risk {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #f0f3ef;
+      border: 1px solid var(--line);
+    }
+    .risk {
+      color: var(--red);
+      background: #fff4f1;
+      border-color: #f5c8be;
+    }
+    .event-card h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.32;
+      letter-spacing: 0;
+    }
+    .event-body {
+      display: grid;
+      gap: 8px;
+    }
+    .event-body p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .sources {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(45,108,223,.28);
+    }
+    a:hover { border-bottom-color: var(--blue); }
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .trend-card {
+      padding: 15px;
+      min-height: 166px;
+    }
+    .trend-card span {
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .trend-card h3 {
+      margin: 8px 0 8px;
+      font-size: 16px;
+    }
+    .trend-card p {
+      margin: 0;
+      color: #424a42;
+      font-size: 14px;
+    }
+    .watch-panel {
+      padding: 16px 18px;
+    }
+    .watch-panel ol {
+      margin: 0;
+      padding-left: 22px;
+      columns: 2;
+      column-gap: 42px;
+    }
+    .watch-panel li {
+      break-inside: avoid;
+      margin: 0 0 8px;
+    }
+    .market-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .market-table-wrap, .fund-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      background: #f0f3ef;
+    }
+    td span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    tr:last-child td {
+      border-bottom: 0;
+    }
+    .up { color: var(--green); font-weight: 800; }
+    .down { color: var(--red); font-weight: 800; }
+    .fund-panel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+    }
+    .fund-card {
+      min-height: 170px;
+      padding: 14px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .fund-card:nth-child(2n) {
+      border-right: 0;
+    }
+    .fund-card:nth-last-child(-n+2) {
+      border-bottom: 0;
+    }
+    .fund-card span {
+      color: var(--violet);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .fund-card h3 {
+      margin: 7px 0 8px;
+      font-size: 15px;
+    }
+    .fund-card p {
+      margin: 0 0 8px;
+      font-size: 13px;
+    }
+    .fund-card small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .investment-resources {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .resource-link {
+      display: block;
+      min-height: 76px;
+      padding: 11px 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .resource-link strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .resource-link span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 860px) {
+      header {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+      .status {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .event-grid, .trend-grid, .investment-summary {
+        grid-template-columns: 1fr;
+      }
+      .market-layout {
+        grid-template-columns: 1fr;
+      }
+      .investment-resources {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .watch-panel ol {
+        columns: 1;
+      }
+    }
+    @media (max-width: 520px) {
+      .shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 14px;
+      }
+      .status {
+        grid-template-columns: 1fr;
+      }
+      .event-card {
+        min-height: 0;
+      }
+      .fund-panel {
+        grid-template-columns: 1fr;
+      }
+      .fund-card, .fund-card:nth-child(2n), .fund-card:nth-last-child(-n+2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .fund-card:last-child {
+        border-bottom: 0;
+      }
+      table {
+        min-width: 680px;
+      }
+      .market-table-wrap {
+        overflow-x: auto;
+      }
+      .investment-head {
+        display: block;
+      }
+      .investment-resources {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>今日全球热点简报</h1>
+        <p class="subtitle">先看投资与市场，再看全球大事。市场内容聚合全球股票、商品、债券和中国板块基金方向，用来帮你快速建立当天风险偏好。</p>
+      </div>
+      <div class="status">
+        <div class="metric"><b>60</b><span>候选源条目</span></div>
+        <div class="metric"><b>10</b><span>重点事件</span></div>
+        <div class="metric"><b>19</b><span>市场观察</span></div>
+        <div class="metric"><b>2026-06-24 14:43</b><span>生成时间</span></div>
+      </div>
+    </header>
+
+    <section>
+      <div class="section-title">
+        <h2>投资观察</h2>
+        <p>第一屏优先看资产变化、主题基金和信息源入口</p>
+      </div>
+      <div class="investment-hero">
+        <div class="investment-head">
+          <div>
+            <h2>今日投资雷达</h2>
+            <p>全球股票关注世界主要区域，中国基金关注 A 股板块主题。以下不是投资建议，只是当天信息观察。</p>
+          </div>
+          <p>2026-06-24</p>
+        </div>
+        <div class="investment-summary">
+          
+            <article class="investment-card">
+              <span>全球风险偏好</span>
+              <strong>偏谨慎</strong>
+              <h3>科技股降温，防御资产相对抗跌</h3>
+              <p>纳指代理 QQQ 跌幅大于 SPY 与 DIA，说明市场主要在给 AI/半导体高估值交易降温。</p>
+            </article>
+            
+            <article class="investment-card">
+              <span>AI 交易</span>
+              <strong>高波动</strong>
+              <h3>美光财报成为短线情绪锚点</h3>
+              <p>AI 芯片和存储链波动扩大，后续重点看美光财报、资本开支指引和毛利率预期。</p>
+            </article>
+            
+            <article class="investment-card">
+              <span>中国主题基金</span>
+              <strong>主题活跃</strong>
+              <h3>半导体、CRO、锂矿是今日主线</h3>
+              <p>A 股热点集中在科技硬件、创新药外包和新能源材料，偏主题轮动，适合看持续性。</p>
+            </article>
+            
+            <article class="investment-card">
+              <span>避险与商品</span>
+              <strong>避险观察</strong>
+              <h3>黄金、原油回落，长债小幅走强</h3>
+              <p>GLD、USO 下行而 TLT 小涨，资金更像在降低高波动资产暴露，而不是全面 risk-on。</p>
+            </article>
+            
+        </div>
+        <div class="market-layout">
+          <div class="market-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>全球资产</th>
+                  <th>最新价</th>
+                  <th>涨跌</th>
+                  <th>状态</th>
+                  <th>解读</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+            <tr>
+              <td><strong>美国大盘</strong><span>SPY / S&amp;P 500</span></td>
+              <td>733.58</td>
+              <td class="down">-1.39%</td>
+              <td>回调</td>
+              <td>大盘承压，但跌幅小于纳指，资金仍在区分成长与价值。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>美国科技</strong><span>QQQ / Nasdaq 100</span></td>
+              <td>713.65</td>
+              <td class="down">-3.28%</td>
+              <td>压力较大</td>
+              <td>AI 芯片与大型科技股波动加大，短线需要看 Micron 等财报反馈。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>美国蓝筹</strong><span>DIA / Dow</span></td>
+              <td>516.62</td>
+              <td class="down">-0.10%</td>
+              <td>相对抗跌</td>
+              <td>道指类资产回撤较轻，防御属性更强。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>日本股票</strong><span>EWJ / MSCI Japan</span></td>
+              <td>92.75</td>
+              <td class="down">-4.36%</td>
+              <td>明显回调</td>
+              <td>亚太风险偏好受到科技链和汇率预期共同影响。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>欧洲股票</strong><span>VGK / FTSE Europe</span></td>
+              <td>87.16</td>
+              <td class="down">-1.24%</td>
+              <td>温和回调</td>
+              <td>欧洲关注北约、能源和热浪带来的政策变量。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>新兴市场</strong><span>EEM / MSCI EM</span></td>
+              <td>67.17</td>
+              <td class="down">-5.73%</td>
+              <td>承压</td>
+              <td>受美元、科技链和风险资产降温影响更明显。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>中国大盘</strong><span>ASHR / CSI 300 A 股</span></td>
+              <td>36.06</td>
+              <td class="down">-3.31%</td>
+              <td>承压</td>
+              <td>海外交易时段的 A 股 ETF 偏弱，需结合 A 股收盘与北向/ETF 资金再判断。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>中国港股</strong><span>FXI / China Large-Cap</span></td>
+              <td>32.83</td>
+              <td class="down">-1.77%</td>
+              <td>回调</td>
+              <td>港股大盘受全球风险偏好和中概科技情绪共同影响。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>黄金</strong><span>GLD / Gold</span></td>
+              <td>377.32</td>
+              <td class="down">-1.88%</td>
+              <td>回落</td>
+              <td>地缘风险仍在，但短线美元和流动性定价更占上风。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>长久期美债</strong><span>TLT / 20Y+ Treasury</span></td>
+              <td>86.20</td>
+              <td class="up">+0.15%</td>
+              <td>小幅走强</td>
+              <td>风险资产回调时，长债有一定对冲属性。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>原油</strong><span>USO / Oil</span></td>
+              <td>111.26</td>
+              <td class="down">-1.26%</td>
+              <td>回落</td>
+              <td>美伊谈判与霍尔木兹运输预期会继续影响油价波动。</td>
+            </tr>
+            
+            <tr>
+              <td><strong>美元</strong><span>UUP / US Dollar</span></td>
+              <td>28.45</td>
+              <td class="up">+0.37%</td>
+              <td>偏强</td>
+              <td>美元偏强通常会压制新兴市场和部分商品风险偏好。</td>
+            </tr>
+            
+              </tbody>
+            </table>
+          </div>
+          <div class="fund-panel">
+            
+            <article class="fund-card">
+              <div><span>高热度</span></div>
+              <h3>半导体 / 芯片 ETF</h3>
+              <p>今日半导体板块活跃，先进封装、PCB、存储链和 AI 硬件涨价逻辑仍是主线。</p>
+              <small>可关注芯片 ETF、半导体设备 ETF、科创芯片 ETF；重点看美光财报后能否继续扩散。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>修复观察</span></div>
+              <h3>CRO / 创新药 / 医药 ETF</h3>
+              <p>CRO 概念盘中走高，创新药 ETF 也有资金关注。</p>
+              <small>可关注创新药 ETF、医药 ETF、港股创新药基金；重点看 BD、临床数据和集采扰动。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>弹性观察</span></div>
+              <h3>锂矿 / 新能源材料 ETF</h3>
+              <p>锂矿概念活跃，新能源材料链出现阶段性交易机会。</p>
+              <small>关注价格周期、库存去化和下游需求恢复，避免只追短线情绪。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>资金关注</span></div>
+              <h3>券商 / 非银金融 ETF</h3>
+              <p>近期非银金融获得资金关注，市场活跃度提升时弹性通常更高。</p>
+              <small>关注成交额能否持续放大，以及指数突破后的增量资金。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>产业链扩散</span></div>
+              <h3>PCB / 先进封装 / 算力硬件</h3>
+              <p>AI 服务器带动 PCB、CCL、封装测试和存储链关注度上升。</p>
+              <small>可通过半导体设备、电子、通信设备等主题基金观察，优先看业绩兑现而非单日涨幅。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>轮动补涨</span></div>
+              <h3>建材 / 化纤 / 氟化工主题</h3>
+              <p>午盘资料显示建材、化纤、氟概念等板块靠前。</p>
+              <small>更适合当作轮动信号观察，优先看持续性和龙头强度。</small>
+            </article>
+            
+            <article class="fund-card">
+              <div><span>暂时降温</span></div>
+              <h3>传媒 / 旅游 / 粮食概念</h3>
+              <p>今日相关板块表现偏弱。</p>
+              <small>等待事件催化或资金重新回流，不宜只因回调就判断反转。</small>
+            </article>
+            
+          </div>
+        </div>
+        <div class="investment-resources">
+          
+            <a class="resource-link" href="https://quote.eastmoney.com/center/" target="_blank" rel="noreferrer">
+              <strong>东方财富行情中心</strong>
+              <span>A 股、港股、基金、板块行情入口</span>
+            </a>
+            
+            <a class="resource-link" href="https://stock.eastmoney.com/hangye.html" target="_blank" rel="noreferrer">
+              <strong>东方财富行业频道</strong>
+              <span>行业新闻、行业资金流、行业研究</span>
+            </a>
+            
+            <a class="resource-link" href="https://tags.sina.com.cn/finance_agu" target="_blank" rel="noreferrer">
+              <strong>新浪财经 A股滚动</strong>
+              <span>A 股异动、午评、板块快讯</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.stcn.com/article/list/a_stock.html" target="_blank" rel="noreferrer">
+              <strong>证券时报 A股</strong>
+              <span>A 股新闻、热点板块、公司动态</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.cls.cn/" target="_blank" rel="noreferrer">
+              <strong>财联社</strong>
+              <span>快讯和盘中主题线索</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.cnbc.com/markets/" target="_blank" rel="noreferrer">
+              <strong>CNBC Markets</strong>
+              <span>美股、全球市场和宏观新闻</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.marketwatch.com/" target="_blank" rel="noreferrer">
+              <strong>MarketWatch</strong>
+              <span>美股指数、公司和市场评论</span>
+            </a>
+            
+            <a class="resource-link" href="https://finance.yahoo.com/" target="_blank" rel="noreferrer">
+              <strong>Yahoo Finance</strong>
+              <span>全球 ETF、股票和宏观资产快照</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.tradingview.com/markets/" target="_blank" rel="noreferrer">
+              <strong>TradingView</strong>
+              <span>图表、技术指标和跨市场观察</span>
+            </a>
+            
+            <a class="resource-link" href="https://www.etf.com/" target="_blank" rel="noreferrer">
+              <strong>ETF.com</strong>
+              <span>海外 ETF 查询和分类</span>
+            </a>
+            
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>今日大事</h2>
+        <p>按影响面排序，每张卡只保留关键信息</p>
+      </div>
+      <div class="event-grid">
+        
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">01</span>
+                <span class="tag">地缘</span>
+                <span class="region">俄乌</span>
+                <span class="risk">高影响</span>
+              </div>
+              <h2>乌克兰加大对克里米亚与俄境内基础设施打击</h2>
+              <div class="event-body">
+                <p>过去 24 小时，多源报道聚焦乌克兰无人机与桥梁、能源设施打击，克里米亚出现安全管控与燃油压力。</p>
+                <p>战争正在从前线消耗扩展到后方基础设施成本，影响俄罗斯补给、国内感知和后续谈判筹码。</p>
+              </div>
+              <div class="sources"><a href="https://www.theguardian.com/world/2026/jun/24/ukraine-war-briefing-crimea-locks-down-as-putin-acknowledges-huge-stream-of-ukrainian-drones" target="_blank" rel="noreferrer">The Guardian</a> <a href="https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&amp;gl=US&amp;ceid=US:en" target="_blank" rel="noreferrer">Google News</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">02</span>
+                <span class="tag">外交</span>
+                <span class="region">中东</span>
+                <span class="risk">高影响</span>
+              </div>
+              <h2>美伊围绕核查、制裁与霍尔木兹安排继续谈判</h2>
+              <div class="event-body">
+                <p>NPR 与地区媒体报道显示，美伊谈判仍在推进，但核查安排和制裁减免仍是核心分歧。</p>
+                <p>若协议推进，将直接影响中东安全、能源运输、油价预期和美国对地区盟友的平衡。</p>
+              </div>
+              <div class="sources"><a href="https://www.npr.org/2026/06/23/nx-s1-5867322/us-iran-finalize-war-ending-deal" target="_blank" rel="noreferrer">NPR</a> <a href="https://www.aljazeera.com/news/liveblog/2026/6/22/iran-war-live-first-day-of-us-talks-covers-lebanon-hormuz-frozen-assets" target="_blank" rel="noreferrer">Al Jazeera</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">03</span>
+                <span class="tag">安全</span>
+                <span class="region">朝鲜半岛</span>
+                <span class="risk">高影响</span>
+              </div>
+              <h2>朝鲜展示 5000 吨级驱逐舰，强化海上核威慑叙事</h2>
+              <div class="event-body">
+                <p>朝鲜宣布新型驱逐舰入列，金正恩强调海上核能力和远海投射能力。</p>
+                <p>朝鲜军事表达从导弹与陆基核威慑继续向海上平台延伸，区域海上安全不确定性上升。</p>
+              </div>
+              <div class="sources"><a href="https://apnews.com/article/ab1896be64bd1e3e198104477b80109e" target="_blank" rel="noreferrer">AP</a> <a href="https://www.theguardian.com/world/2026/jun/24/north-korea-nuclear-program-kim-jong-un" target="_blank" rel="noreferrer">The Guardian</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">04</span>
+                <span class="tag">冲突</span>
+                <span class="region">以黎/加沙</span>
+                <span class="risk">高影响</span>
+              </div>
+              <h2>以黎停火仍脆弱，联合国继续关注巴勒斯坦儿童受害</h2>
+              <div class="event-body">
+                <p>以黎边境仍有零星冲突；联合国独立委员会继续发布关于加沙和约旦河西岸儿童受害的严重指控。</p>
+                <p>这条线同时牵动停火可信度、国际法争议、人道援助与地区代理人冲突风险。</p>
+              </div>
+              <div class="sources"><a href="https://news.un.org/feed/view/en/story/2026/06/1167790" target="_blank" rel="noreferrer">UN News</a> <a href="https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&amp;gl=US&amp;ceid=US:en" target="_blank" rel="noreferrer">Google News</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">05</span>
+                <span class="tag">联盟</span>
+                <span class="region">美国/欧洲</span>
+                <span class="risk">中高影响</span>
+              </div>
+              <h2>北约秘书长 Rutte 赴白宫，峰会前稳住特朗普政府</h2>
+              <div class="event-body">
+                <p>北约 7 月峰会前，Rutte 与特朗普会谈，议题集中在防务分担、欧洲部署和对乌支持。</p>
+                <p>美国对北约承诺的强弱会改变欧洲安全预算、乌克兰援助节奏和联盟内部协调成本。</p>
+              </div>
+              <div class="sources"><a href="https://www.thehour.com/news/article/nato-s-trump-whisperer-heads-to-the-white-house-22318173.php" target="_blank" rel="noreferrer">AP 转引</a> <a href="https://www.france24.com/en/americas/20260624-nato-rutte-soothe-trump-white-house-visit-july-summit-western-alliance-hegseth" target="_blank" rel="noreferrer">France 24</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">06</span>
+                <span class="tag">气候</span>
+                <span class="region">法国/欧洲</span>
+                <span class="risk">中影响</span>
+              </div>
+              <h2>法国热浪暴露农业与城市适应短板</h2>
+              <div class="event-body">
+                <p>法国高温持续，农业端出现热风与高土温导致作物快速受损的风险，城市建筑降温也进入公共讨论。</p>
+                <p>极端天气正在从环保议题转为供给、基础设施、公共健康和城市治理议题。</p>
+              </div>
+              <div class="sources"><a href="https://www.france24.com/en/france/20260624-france-latest-heatwave-temperatures-will-fall-and-we-talk-about-anymore-gemmene-un-climate-change" target="_blank" rel="noreferrer">France 24</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">07</span>
+                <span class="tag">人道</span>
+                <span class="region">苏丹</span>
+                <span class="risk">中高影响</span>
+              </div>
+              <h2>联合国报告详述苏丹战争中的大规模性暴力</h2>
+              <div class="event-body">
+                <p>联合国人权报告称，苏丹冲突相关性暴力规模和残酷性严重，并对受害者和社区造成长期影响。</p>
+                <p>苏丹危机仍在持续恶化，人道救援、国际问责和地区外溢风险都需要继续关注。</p>
+              </div>
+              <div class="sources"><a href="https://www.ohchr.org/en/press-releases/2026/06/un-report-documents-widespread-and-brutal-use-sexual-violence-sudan" target="_blank" rel="noreferrer">OHCHR</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">08</span>
+                <span class="tag">公共卫生</span>
+                <span class="region">刚果（金）</span>
+                <span class="risk">中高影响</span>
+              </div>
+              <h2>刚果（金）埃博拉疫情进入高风险观察期</h2>
+              <div class="event-body">
+                <p>WHO 资料显示，此轮疫情涉及 Bundibugyo 型埃博拉，治疗与疫苗选择更有限。</p>
+                <p>跨境传播、儿童风险和医疗系统承压会让局部疫情快速转化为区域公共卫生议题。</p>
+              </div>
+              <div class="sources"><a href="https://www.who.int/emergencies/situations/ebola-outbreak---drc-2026" target="_blank" rel="noreferrer">WHO</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">09</span>
+                <span class="tag">财经</span>
+                <span class="region">美国市场</span>
+                <span class="risk">中影响</span>
+              </div>
+              <h2>Alphabet 将取代 Verizon 加入道琼斯指数</h2>
+              <div class="event-body">
+                <p>Google 母公司 Alphabet 将进入道琼斯工业平均指数，Verizon 被替换。</p>
+                <p>指数成分变化反映传统电信权重下降，科技平台与 AI 相关资产在资本市场中的位置继续上升。</p>
+              </div>
+              <div class="sources"><a href="https://www.marketwatch.com/story/alphabets-stock-is-set-to-join-the-dow-heres-which-company-is-getting-the-boot-73453ca7" target="_blank" rel="noreferrer">MarketWatch</a></div>
+            </article>
+            
+            <article class="event-card">
+              <div class="event-meta">
+                <span class="rank">10</span>
+                <span class="tag">科技</span>
+                <span class="region">全球</span>
+                <span class="risk">待核实</span>
+              </div>
+              <h2>AI 芯片、AI SaaS 并购与科技股波动同时升温</h2>
+              <div class="event-body">
+                <p>Techmeme 抓到 Nvidia 芯片出口管制、AI SaaS 并购、AI 检测工具收购、存储与半导体股回调等多条线索。</p>
+                <p>AI 产业从模型发布进入算力供需、合规审查、并购整合和市场重估的复合阶段。</p>
+              </div>
+              <div class="sources"><a href="https://www.techmeme.com/260623/p48#a260623p48" target="_blank" rel="noreferrer">Techmeme</a> <a href="https://www.techmeme.com/260624/p1#a260624p1" target="_blank" rel="noreferrer">Techmeme</a></div>
+            </article>
+            
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>趋势信号</h2>
+        <p>不是单条新闻，而是今天浮出来的方向</p>
+      </div>
+      <div class="trend-grid">
+        
+            <article class="trend-card">
+              <span>能源/气候</span>
+              <h3>能源议题重新居中</h3>
+              <p>核电贷款、AI 能耗披露、欧洲热浪同时出现，能源安全和气候适应正在被同一套治理框架绑定。</p>
+            </article>
+            
+            <article class="trend-card">
+              <span>AI/软件</span>
+              <h3>AI 商业化进入并购整合期</h3>
+              <p>营销自动化、AI 检测、供应链 AI 工具都出现融资或并购，应用层开始从试点走向平台吸收。</p>
+            </article>
+            
+            <article class="trend-card">
+              <span>健康</span>
+              <h3>公共卫生风险回到视野</h3>
+              <p>埃博拉和疫苗相关疾病提示，低频高冲击的卫生事件仍然值得日常监控。</p>
+            </article>
+            
+            <article class="trend-card">
+              <span>市场</span>
+              <h3>资本市场继续科技化</h3>
+              <p>Alphabet 进入道指以及 AI 芯片链波动，说明科技平台已从成长主题变成主流资产定价核心。</p>
+            </article>
+            
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>明天继续关注</h2>
+        <p>适合后续自动化继续追踪的变量</p>
+      </div>
+      <div class="watch-panel">
+        <ol><li>美伊谈判是否形成可执行核查安排</li>
+<li>俄乌后方基础设施攻击是否引发能源和物流持续扰动</li>
+<li>北约峰会前美国对欧洲军事部署的口径变化</li>
+<li>法国热浪后续对农业产量与公共健康的影响</li>
+<li>刚果（金）埃博拉是否出现跨境扩散迹象</li></ol>
+      </div>
+    </section>
+
+    <footer>
+      World Hot 自动简报测试版。市场内容仅作信息聚合和观察，不构成投资建议；部分 RSS 源可能因网络连接失败缺席。
+    </footer>
+  </main>
+</body>
+</html>
