@@ -1,0 +1,110 @@
+{
+  "timezone": "Asia/Shanghai",
+  "sources": [
+    {
+      "name": "BBC World",
+      "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+      "category": "world",
+      "weight": 5,
+      "language": "en"
+    },
+    {
+      "name": "The Guardian World",
+      "url": "https://www.theguardian.com/world/rss",
+      "category": "world",
+      "weight": 4,
+      "language": "en"
+    },
+    {
+      "name": "Al Jazeera",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "category": "world",
+      "weight": 4,
+      "language": "en"
+    },
+    {
+      "name": "NPR World",
+      "url": "https://feeds.npr.org/1004/rss.xml",
+      "category": "world",
+      "weight": 4,
+      "language": "en"
+    },
+    {
+      "name": "DW Top Stories",
+      "url": "https://rss.dw.com/xml/rss-en-all",
+      "category": "world",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "France 24",
+      "url": "https://www.france24.com/en/rss",
+      "category": "world",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "UN News",
+      "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml",
+      "category": "world",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "Google News World",
+      "url": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en",
+      "category": "world",
+      "weight": 4,
+      "language": "en"
+    },
+    {
+      "name": "Google News Business",
+      "url": "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-US&gl=US&ceid=US:en",
+      "category": "business",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "Google News Technology",
+      "url": "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en",
+      "category": "technology",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "Google News Science",
+      "url": "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-US&gl=US&ceid=US:en",
+      "category": "science",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "Google News Health",
+      "url": "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-US&gl=US&ceid=US:en",
+      "category": "health",
+      "weight": 3,
+      "language": "en"
+    },
+    {
+      "name": "Techmeme",
+      "url": "https://www.techmeme.com/feed.xml",
+      "category": "technology",
+      "weight": 4,
+      "language": "en"
+    },
+    {
+      "name": "Hacker News Front Page",
+      "url": "https://hnrss.org/frontpage",
+      "category": "technology",
+      "weight": 2,
+      "language": "en"
+    },
+    {
+      "name": "Reddit WorldNews",
+      "url": "https://www.reddit.com/r/worldnews/.rss",
+      "category": "trends",
+      "weight": 2,
+      "language": "en"
+    }
+  ]
+}

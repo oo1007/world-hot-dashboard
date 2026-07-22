@@ -1,0 +1,4 @@
+interface:
+  display_name: "World Hot"
+  short_description: "Generate Chinese briefings for global news and trends."
+  default_prompt: "生成今天的中文全球新闻与热点简报。"
